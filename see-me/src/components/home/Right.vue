@@ -85,6 +85,10 @@
           <div class="Right_box_body_item_text">xxx</div>
         </div>
         <div class="Right_box_body_item">
+          <div class="Right_box_body_item_label">技术栈：</div>
+          <div class="Right_box_body_item_text">xxx</div>
+        </div>
+        <div class="Right_box_body_item">
           <div class="Right_box_body_item_label">项目难点：</div>
           <div class="Right_box_body_item_text">xxx</div>
         </div>
@@ -108,6 +112,10 @@
         <h3>▫ 哆.生活App</h3>
         <div class="Right_box_body_item">
           <div class="Right_box_body_item_label">项目初衷：</div>
+          <div class="Right_box_body_item_text">xxx</div>
+        </div>
+        <div class="Right_box_body_item">
+          <div class="Right_box_body_item_label">技术栈：</div>
           <div class="Right_box_body_item_text">xxx</div>
         </div>
         <div class="Right_box_body_item">
