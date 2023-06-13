@@ -1,13 +1,19 @@
 :root{
   width: 100%;
-  font-size: 10px;
   height: 100%;
 }
 body{
   width: 100%;
   height: 100%;
+  
 }
 #app {
   width: 100%;
   height: 100%;
+  background-color: aliceblue;
+}
+.box_shadow {
+  box-shadow: 10px 10px 3px silver;
+  border-radius: 16px;
+  background-color: rgba(255,255,255,0.88);
 }
