@@ -5,13 +5,18 @@
     </div>
     <div class="Left_down">
       <h2>Jayce</h2>
-      <text>上海 | 前端开发工程师</text>
+      <text>3年 | 前端开发工程师</text>
+      <div class="Left_down_icons">
+        <LocalTwo theme="filled" size="24" fill="#333" />
+      </div>
       <div class="Left_down_btn">save as pdf</div>
+      <el-button>233</el-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { LocalTwo } from "@icon-park/vue-next";
 /* ---变量--- */
 
 /* ---方法--- */
@@ -64,7 +69,10 @@
     &_btn:hover {
       background-color: bisque;
     }
-
+    &_icons {
+      display: flex;
+      flex-direction: row;
+    }
     text {
       color: #a2a2a2;
     }

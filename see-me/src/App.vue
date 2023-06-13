@@ -27,7 +27,6 @@ import Right from "./components/home/Right.vue";
     padding: 20px;
     height: 100%;
     width: 100%;
-    overflow: auto;
     display: flex;
     flex-direction: row;
     justify-content: center;
