@@ -1,11 +1,17 @@
 <script setup>
 import Left from "./components/home/Left.vue";
 import Right from "./components/home/Right.vue";
+// import { ref } from "vue";
+// const rightRef = ref(null);
+// const exportPng = () => {
+//   const dd = rightRef.value.children[1];
+//   console.log(dd, dd.scrollLeft, dd.scrollTop, dd.scrollWidth, dd.scrollHeight);
+// };
 </script>
 
 <template>
   <div class="container">
-    <div class="container_body">
+    <div class="container_body" ref="rightRef">
       <Left />
       <Right />
     </div>
@@ -23,6 +29,10 @@ import Right from "./components/home/Right.vue";
     bottom: 0;
   }
   .container_body {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    z-index: 1;
     box-sizing: border-box;
     padding: 20px;
     height: 100%;

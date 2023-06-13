@@ -1,0 +1,29 @@
+:root {
+  width: 100%;
+  height: 100%;
+}
+body {
+  width: 100%;
+  height: 100%;
+}
+#app {
+  width: 100%;
+  height: 100%;
+  background-color: aliceblue;
+}
+.box_shadow {
+  box-shadow: 3px 3px 6px silver;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.88);
+}
+
+// 滚动条
+*::-webkit-scrollbar  {
+  width: 10px;
+  // height: 10px; // 高度写不写，都不影响，因为会根据内容的长度自动计算
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #ccc; // 滑块颜色
+  border-radius: 5px; // 滑块圆角
+}

@@ -3,7 +3,7 @@ import App from "./App.vue";
 import ElementPlus from "element-plus";
 import "normalize.css";
 import "element-plus/dist/index.css";
-import "./style.css";
+import "./style.less";
 
 const app = createApp(App);
 app.use(ElementPlus);
