@@ -11,7 +11,7 @@
     "linkl": "作品链接",
     "successl": "操作成功",
     "faill": "操作失败",
-    "loading": "加载中",
+    "loading": "请求中...",
     "version": "版本"
   },
   "basic": {

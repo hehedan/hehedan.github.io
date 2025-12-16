@@ -11,7 +11,7 @@
     "input": "Please enter",
     "successl": "Operation success",
     "faill": "Operation failed",
-    "loading": "Loading",
+    "loading": "Requesting...",
     "version": "version"
   },
   "basic": {

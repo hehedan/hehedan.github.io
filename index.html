@@ -1,14 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/title.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>我的简历</title>
-    <script type="module" crossorigin src="/assets/index-DSHCunVx.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CFCCTDtD.css">
+    <style>
+      #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        box-sizing: border-box;
+        padding: 16px;
+        transition: all 0.5s ease-in-out 0s;
+      }
+      .loading-bg {
+        height: 100%;
+        font-size: large;
+        background: white;
+        color: #333;
+        width: 100%;
+        max-width: 666px;
+        position: relative;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px,
+          rgba(0, 0, 0, 0.23) 0px 3px 6px;
+        background-image: url("/stand.png");
+        background-position: bottom right;
+        /* 垂直靠底、水平居中（关键） */
+        background-size: 30% auto;
+        /* 宽度占满 div，高度自动（保持宽高比） */
+        background-repeat: no-repeat;
+        /* 禁止图片重复 */
+        box-sizing: border-box;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-BaZYU7g5.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CWeeT_FQ.css">
   </head>
   <body>
+    <div id="loading">
+      <div class="loading-bg">Loading...</div>
+    </div>
     <div id="app"></div>
   </body>
 </html>
