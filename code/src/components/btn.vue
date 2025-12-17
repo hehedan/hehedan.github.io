@@ -165,6 +165,7 @@ const onThemeChange = () => {
 };
 const onLangChange = () => {
   isZh.value = !isZh.value;
+  select.value = "basic";
   emits("langChange", isZh.value);
 };
 const selectChange = (v) => {
