@@ -9,7 +9,7 @@
     "pnl": "Project Name",
     "linkl": "Project Link",
     "input": "Please enter",
-    "successl": "Operation success, please refresh the page to view",
+    "successl": "Operation success",
     "faill": "Operation failed",
     "loading": "Requesting...",
     "version": "version"
