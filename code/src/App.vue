@@ -105,18 +105,34 @@ const dataChange = (
   needJsonStringify,
   needAll,
   isAdd,
-  emptyItem
+  emptyItem,
+  needOrder = false,
+  index = -1,
+  isUp = false
 ) => {
   if (needJsonStringify) {
     resumeData.value[lang][objType]["list"] = JSON.stringify(v);
+    const otherLang = lang === "zh" ? "en" : "zh";
+    const oldDataStr = resumeData.value[otherLang][objType]["list"];
+    const oldData = JSON.parse(oldDataStr);
     if (needAll) {
-      const otherLang = lang === "zh" ? "en" : "zh";
-      const oldDataStr = resumeData.value[otherLang][objType]["list"];
-      const oldData = JSON.parse(oldDataStr);
       if (isAdd) {
         oldData.push(emptyItem);
       } else {
         oldData.splice(emptyItem, 1);
+      }
+      resumeData.value[otherLang][objType]["list"] = JSON.stringify(oldData);
+      return;
+    }
+    if (needOrder) {
+      if (isUp) {
+        const temp = oldData[index];
+        oldData[index] = oldData[index - 1];
+        oldData[index - 1] = temp;
+      } else {
+        const temp = oldData[index];
+        oldData[index] = oldData[index + 1];
+        oldData[index + 1] = temp;
       }
       resumeData.value[otherLang][objType]["list"] = JSON.stringify(oldData);
     }

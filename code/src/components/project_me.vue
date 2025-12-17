@@ -33,69 +33,82 @@
         </div>
       </div>
       <template v-else>
-        <n-input
-          ref="project_meInputRef"
-          style="width: 80%"
-          size="small"
-          v-model:value="list[index].name"
-          :status="i.name ? '' : 'error'"
-          :placeholder="
-            t('const.input') + (locale === 'en' ? ' ' : '') + t('const.pnl')
-          "
-          @update:value="() => dataChange()"
-          clearable
-        />
-        <n-icon class="icon-btn" @click="remove(index)"
-          ><RemoveCircle
-        /></n-icon>
-        <n-input
-          ref="project_meInputRef"
-          style="width: 80%"
-          size="small"
-          v-model:value="list[index].ic"
-          :status="i.ic ? '' : 'error'"
-          :placeholder="
-            t('const.input') + (locale === 'en' ? ' ' : '') + t('const.il')
-          "
-          @update:value="() => dataChange()"
-          clearable
-        />
-        <n-input
-          ref="project_meInputRef"
-          style="width: 80%"
-          size="small"
-          v-model:value="list[index].cc"
-          :status="i.cc ? '' : 'error'"
-          :placeholder="
-            t('const.input') + (locale === 'en' ? ' ' : '') + t('const.cl')
-          "
-          @update:value="() => dataChange()"
-          clearable
-        />
-        <n-input
-          ref="project_meInputRef"
-          style="width: 80%"
-          size="small"
-          v-model:value="list[index].dc"
-          :status="i.dc ? '' : 'error'"
-          :placeholder="
-            t('const.input') + (locale === 'en' ? ' ' : '') + t('const.dl')
-          "
-          @update:value="() => dataChange()"
-          clearable
-        />
-        <n-input
-          ref="project_meInputRef"
-          style="width: 80%"
-          size="small"
-          v-model:value="list[index].link"
-          :status="i.link ? '' : 'error'"
-          :placeholder="
-            t('const.input') + (locale === 'en' ? ' ' : '') + t('const.linkl')
-          "
-          @update:value="() => dataChange()"
-          clearable
-        />
+        <div class="edit-form-content">
+          <div style="width: 80%">
+            <n-input
+              ref="project_meInputRef"
+              size="small"
+              v-model:value="list[index].name"
+              :status="i.name ? '' : 'error'"
+              :placeholder="
+                t('const.input') + (locale === 'en' ? ' ' : '') + t('const.pnl')
+              "
+              @update:value="() => dataChange()"
+              clearable
+            />
+
+            <n-input
+              ref="project_meInputRef"
+              size="small"
+              v-model:value="list[index].ic"
+              :status="i.ic ? '' : 'error'"
+              :placeholder="
+                t('const.input') + (locale === 'en' ? ' ' : '') + t('const.il')
+              "
+              @update:value="() => dataChange()"
+              clearable
+            />
+            <n-input
+              ref="project_meInputRef"
+              size="small"
+              v-model:value="list[index].cc"
+              :status="i.cc ? '' : 'error'"
+              :placeholder="
+                t('const.input') + (locale === 'en' ? ' ' : '') + t('const.cl')
+              "
+              @update:value="() => dataChange()"
+              clearable
+            />
+            <n-input
+              ref="project_meInputRef"
+              size="small"
+              v-model:value="list[index].dc"
+              :status="i.dc ? '' : 'error'"
+              :placeholder="
+                t('const.input') + (locale === 'en' ? ' ' : '') + t('const.dl')
+              "
+              @update:value="() => dataChange()"
+              clearable
+            />
+            <n-input
+              ref="project_meInputRef"
+              size="small"
+              v-model:value="list[index].link"
+              :status="i.link ? '' : 'error'"
+              :placeholder="
+                t('const.input') +
+                (locale === 'en' ? ' ' : '') +
+                t('const.linkl')
+              "
+              @update:value="() => dataChange()"
+              clearable
+            />
+          </div>
+          <div class="edit-form-btn">
+            <n-icon class="icon-btn" @click="remove(index)"
+              ><RemoveCircle
+            /></n-icon>
+            <n-icon v-show="index !== 0" class="icon-btn" @click="up(index)"
+              ><CaretUpCircle
+            /></n-icon>
+            <n-icon
+              v-show="index !== list.length - 1"
+              class="icon-btn"
+              @click="down(index)"
+              ><CaretDownCircle
+            /></n-icon>
+          </div>
+        </div>
       </template>
     </div>
   </section>
@@ -104,7 +117,13 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import { ref, watch, onMounted } from "vue";
-import { AddCircle, RemoveCircle, LinkOutline } from "@vicons/ionicons5";
+import {
+  AddCircle,
+  RemoveCircle,
+  LinkOutline,
+  CaretUpCircle,
+  CaretDownCircle,
+} from "@vicons/ionicons5";
 const props = defineProps({
   isEdit: {
     type: Boolean,
@@ -153,7 +172,26 @@ const remove = (index) => {
   list.value.splice(index, 1);
   dataChange(true, false, index);
 };
-const dataChange = (needAll = false, isAdd = false, emptyItem = "") => {
+const up = (index) => {
+  const temp = list.value[index];
+  list.value[index] = list.value[index - 1];
+  list.value[index - 1] = temp;
+  dataChange(false, false, "", true, index, true);
+};
+const down = (index) => {
+  const temp = list.value[index];
+  list.value[index] = list.value[index + 1];
+  list.value[index + 1] = temp;
+  dataChange(false, false, "", true, index, false);
+};
+const dataChange = (
+  needAll = false,
+  isAdd = false,
+  emptyItem = "",
+  needOrder = false,
+  index = -1,
+  isUp = false
+) => {
   emits(
     "change",
     list.value,
@@ -162,7 +200,10 @@ const dataChange = (needAll = false, isAdd = false, emptyItem = "") => {
     true,
     needAll,
     isAdd,
-    emptyItem
+    emptyItem,
+    needOrder,
+    index,
+    isUp
   );
 };
 const validateData = () => {

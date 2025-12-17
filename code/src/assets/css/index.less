@@ -1,5 +1,5 @@
-@import url('./const.less');
-@import url('./naive.less');
+@import url("./const.less");
+@import url("./naive.less");
 
 html[data-theme="dark"] {
   --text-color: #ffffffe6;
@@ -46,4 +46,14 @@ body,
 .icon-btn {
   margin-left: 8px;
   cursor: pointer;
+  font-size: 16px;
+}
+
+.edit-form-content {
+  display: flex;
+  flex-direction: row;
+  .edit-form-btn {
+    display: flex;
+    flex-direction: column;
+  }
 }
