@@ -9,7 +9,7 @@
         v-else
         size="small"
         style="width: 80%"
-        v-model:value="form.school"
+        v-model:value.trim="form.school"
         :status="form.school ? '' : 'error'"
         :placeholder="t('const.input')"
         @update:value="dataChange"
@@ -22,7 +22,7 @@
         v-else
         size="small"
         style="width: 80%"
-        v-model:value="form.major"
+        v-model:value.trim="form.major"
         :status="form.major ? '' : 'error'"
         :placeholder="t('const.input')"
         @update:value="dataChange"

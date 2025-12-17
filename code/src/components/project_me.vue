@@ -38,7 +38,7 @@
             <n-input
               ref="project_meInputRef"
               size="small"
-              v-model:value="list[index].name"
+              v-model:value.trim="list[index].name"
               :status="i.name ? '' : 'error'"
               :placeholder="
                 t('const.input') + (locale === 'en' ? ' ' : '') + t('const.pnl')
@@ -50,7 +50,7 @@
             <n-input
               ref="project_meInputRef"
               size="small"
-              v-model:value="list[index].ic"
+              v-model:value.trim="list[index].ic"
               :status="i.ic ? '' : 'error'"
               :placeholder="
                 t('const.input') + (locale === 'en' ? ' ' : '') + t('const.il')
@@ -61,7 +61,7 @@
             <n-input
               ref="project_meInputRef"
               size="small"
-              v-model:value="list[index].cc"
+              v-model:value.trim="list[index].cc"
               :status="i.cc ? '' : 'error'"
               :placeholder="
                 t('const.input') + (locale === 'en' ? ' ' : '') + t('const.cl')
@@ -72,7 +72,7 @@
             <n-input
               ref="project_meInputRef"
               size="small"
-              v-model:value="list[index].dc"
+              v-model:value.trim="list[index].dc"
               :status="i.dc ? '' : 'error'"
               :placeholder="
                 t('const.input') + (locale === 'en' ? ' ' : '') + t('const.dl')
@@ -83,7 +83,7 @@
             <n-input
               ref="project_meInputRef"
               size="small"
-              v-model:value="list[index].link"
+              v-model:value.trim="list[index].link"
               :status="i.link ? '' : 'error'"
               :placeholder="
                 t('const.input') +

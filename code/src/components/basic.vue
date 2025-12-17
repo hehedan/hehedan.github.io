@@ -7,7 +7,7 @@
           v-else
           size="small"
           style="width: 80%"
-          v-model:value="form.name"
+          v-model:value.trim="form.name"
           :status="form.name ? '' : 'error'"
           :placeholder="t('const.input')"
           @update:value="dataChange"
@@ -20,7 +20,7 @@
           v-else
           size="small"
           style="width: 80%"
-          v-model:value="form.job"
+          v-model:value.trim="form.job"
           :status="form.job ? '' : 'error'"
           :placeholder="t('const.input')"
           @update:value="dataChange"
@@ -33,7 +33,7 @@
           v-else
           size="small"
           style="width: 80%"
-          v-model:value="form.tel"
+          v-model:value.trim="form.tel"
           :status="form.tel ? '' : 'error'"
           :placeholder="t('const.input')"
           @update:value="dataChange"
@@ -46,7 +46,7 @@
           v-else
           size="small"
           style="width: 80%"
-          v-model:value="form.email"
+          v-model:value.trim="form.email"
           :status="form.email ? '' : 'error'"
           :placeholder="t('const.input')"
           @update:value="dataChange"

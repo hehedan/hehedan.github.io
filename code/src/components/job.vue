@@ -20,7 +20,7 @@
             <n-input
               ref="jobInputRef"
               size="small"
-              v-model:value="list[index].company"
+              v-model:value.trim="list[index].company"
               :status="i.company ? '' : 'error'"
               :placeholder="
                 t('const.input') + (locale === 'en' ? ' ' : '') + t('const.cnl')
@@ -31,7 +31,7 @@
             <n-input
               ref="jobInputRef"
               size="small"
-              v-model:value="list[index].name"
+              v-model:value.trim="list[index].name"
               :status="i.name ? '' : 'error'"
               :placeholder="
                 t('const.input') +
@@ -44,7 +44,7 @@
             <n-input
               ref="jobInputRef"
               size="small"
-              v-model:value="list[index].content"
+              v-model:value.trim="list[index].content"
               :status="i.content ? '' : 'error'"
               :placeholder="
                 t('const.input') + (locale === 'en' ? ' ' : '') + t('const.ccl')

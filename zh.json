@@ -9,7 +9,7 @@
     "pnl": "项目名称",
     "input": "请输入",
     "linkl": "作品链接",
-    "successl": "操作成功",
+    "successl": "操作成功，请稍后刷新页面查看",
     "faill": "操作失败",
     "loading": "请求中...",
     "version": "版本"

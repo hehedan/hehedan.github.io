@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { darkTheme, lightTheme, zhCN, dateZhCN } from "naive-ui";
 import basic from "./components/basic.vue";
 import job from "./components/job.vue";
@@ -86,7 +86,7 @@ const isZh = ref(true);
 const Nlocale = ref(null);
 const dateLocale = ref(null);
 const isEdit = ref(false);
-const resumeData = ref();
+const resumeData = reactive({ zh: {}, en: {}, sys: {} });
 
 const selectChange = (v) => {
   const targetElement = document.getElementById(v);
@@ -98,6 +98,49 @@ const selectChange = (v) => {
     });
   }
 };
+// const dataChange = (
+//   v,
+//   lang,
+//   objType,
+//   needJsonStringify,
+//   needAll,
+//   isAdd,
+//   emptyItem,
+//   needOrder = false,
+//   index = -1,
+//   isUp = false
+// ) => {
+//   if (needJsonStringify) {
+//     resumeData[lang][objType]["list"] = JSON.stringify(v);
+//     const otherLang = lang === "zh" ? "en" : "zh";
+//     const oldDataStr = resumeData[otherLang][objType]["list"];
+//     const oldData = JSON.parse(oldDataStr);
+//     if (needAll) {
+//       if (isAdd) {
+//         oldData.push(emptyItem);
+//       } else {
+//         oldData.splice(emptyItem, 1);
+//       }
+//       resumeData[otherLang][objType]["list"] = JSON.stringify(oldData);
+//       return;
+//     }
+//     if (needOrder) {
+//       if (isUp) {
+//         const temp = oldData[index];
+//         oldData[index] = oldData[index - 1];
+//         oldData[index - 1] = temp;
+//       } else {
+//         const temp = oldData[index];
+//         oldData[index] = oldData[index + 1];
+//         oldData[index + 1] = temp;
+//       }
+//       resumeData[otherLang][objType]["list"] = JSON.stringify(oldData);
+//     }
+//   } else {
+//     resumeData[lang][objType] = v;
+//   }
+// };
+// 前提：resumeData = ref({ zh: {}, en: {}, sys: {} })
 const dataChange = (
   v,
   lang,
@@ -111,33 +154,70 @@ const dataChange = (
   isUp = false
 ) => {
   if (needJsonStringify) {
-    resumeData.value[lang][objType]["list"] = JSON.stringify(v);
+    // ******** 1. 处理当前语言的list数据（响应式更新）********
+    // 方式：创建新对象替换旧对象，触发响应式
+    resumeData[lang] = {
+      ...resumeData[lang], // 保留原有属性
+      [objType]: {
+        ...(resumeData[lang][objType] || {}), // 保留objType原有属性
+        list: JSON.stringify(v), // 替换新的list
+      },
+    };
+
+    // ******** 2. 处理另一语言的list数据（响应式更新）********
     const otherLang = lang === "zh" ? "en" : "zh";
-    const oldDataStr = resumeData.value[otherLang][objType]["list"];
+    // 先获取旧数据（处理空值情况）
+    const oldDataStr = resumeData[otherLang]?.[objType]?.list || "[]";
     const oldData = JSON.parse(oldDataStr);
+
     if (needAll) {
+      // 添加/删除项：操作数组后，重新生成新对象
       if (isAdd) {
         oldData.push(emptyItem);
       } else {
         oldData.splice(emptyItem, 1);
       }
-      resumeData.value[otherLang][objType]["list"] = JSON.stringify(oldData);
+      // 替换旧值，触发响应式
+      resumeData[otherLang] = {
+        ...resumeData[otherLang],
+        [objType]: {
+          ...(resumeData[otherLang][objType] || {}),
+          list: JSON.stringify(oldData),
+        },
+      };
       return;
     }
+
     if (needOrder) {
-      if (isUp) {
-        const temp = oldData[index];
-        oldData[index] = oldData[index - 1];
-        oldData[index - 1] = temp;
-      } else {
-        const temp = oldData[index];
-        oldData[index] = oldData[index + 1];
-        oldData[index + 1] = temp;
+      // 调整顺序：操作数组后，重新生成新对象
+      if (isUp && index > 0) {
+        // 边界判断：避免index-1越界
+        [oldData[index], oldData[index - 1]] = [
+          oldData[index - 1],
+          oldData[index],
+        ]; // 解构交换，更简洁
+      } else if (!isUp && index < oldData.length - 1) {
+        // 边界判断：避免index+1越界
+        [oldData[index], oldData[index + 1]] = [
+          oldData[index + 1],
+          oldData[index],
+        ];
       }
-      resumeData.value[otherLang][objType]["list"] = JSON.stringify(oldData);
+      // 替换旧值，触发响应式
+      resumeData[otherLang] = {
+        ...resumeData[otherLang],
+        [objType]: {
+          ...(resumeData[otherLang][objType] || {}),
+          list: JSON.stringify(oldData),
+        },
+      };
     }
   } else {
-    resumeData.value[lang][objType] = v;
+    // 处理非JSON序列化的属性：同样用新对象替换触发响应式
+    resumeData[lang] = {
+      ...resumeData[lang],
+      [objType]: v, // 替换新值
+    };
   }
 };
 const validateData = () => {
@@ -161,29 +241,26 @@ const changeLang = () => {
   btnRef.value.setIsZh(isZh.value);
 };
 const save = async () => {
+  localStorage.setItem("resume_data", JSON.stringify(resumeData));
   if (!validateData()) return message.error(t("const.input"));
   changeLang();
   if (!validateData()) return;
   message.info(t("const.loading"));
-  const version = updateVersion(resumeData.value.sys.version);
-  resumeData.value.sys.updateTime = getTimeStr(new Date());
-  resumeData.value.sys.version = version;
-  console.log(
-    "保存的数据是---------",
-    JSON.stringify(resumeData.value, null, 2)
-  );
-
+  const version = updateVersion(resumeData.sys.version);
+  resumeData.sys.updateTime = getTimeStr(new Date());
+  resumeData.sys.version = version;
+  console.log("保存的数据是---------", JSON.stringify(resumeData, null, 2));
   const res1 = await api_updateContent(
     "sys.json",
-    JSON.stringify(resumeData.value.sys)
+    JSON.stringify(resumeData.sys)
   );
   const res2 = await api_updateContent(
     "zh.json",
-    JSON.stringify(resumeData.value.zh)
+    JSON.stringify(resumeData.zh)
   );
   const res3 = await api_updateContent(
     "en.json",
-    JSON.stringify(resumeData.value.en)
+    JSON.stringify(resumeData.en)
   );
   Promise.all([res1, res2, res3])
     .then((ress) => {
@@ -192,11 +269,14 @@ const save = async () => {
         isEdit.value = false;
         btnRef.value.setIsEdit(false);
         changeLang();
+        console.log(resumeData, "--------------");
       } else {
+        changeLang();
         message.error(t("const.faill"));
       }
     })
     .catch((err) => {
+      changeLang();
       message.error(t("const.faill"));
     });
 };
@@ -223,11 +303,11 @@ const init = () => {
   }
   const data = localStorage.getItem("resume_data");
   if (data) {
-    resumeData.value = JSON.parse(data);
-    console.log(
-      "加载的数据是---------",
-      JSON.stringify(resumeData.value, null, 2)
-    );
+    const _resumeData = JSON.parse(data);
+    resumeData.en = _resumeData.en;
+    resumeData.zh = _resumeData.zh;
+    resumeData.sys = _resumeData.sys;
+    console.log("加载的数据是---------", JSON.stringify(resumeData, null, 2));
   }
 };
 init();

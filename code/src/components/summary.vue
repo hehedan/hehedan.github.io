@@ -15,7 +15,7 @@
           ref="summaryInputRef"
           style="width: 80%"
           size="small"
-          v-model:value="list[index]"
+          v-model:value.trim="list[index]"
           :status="i ? '' : 'error'"
           :placeholder="t('const.input')"
           @update:value="() => dataChange()"

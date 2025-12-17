@@ -50,7 +50,7 @@
     <n-drawer-content title="请输入token">
       <div class="drawer-content">
         <n-input
-          v-model:value="token"
+          v-model:value.trim="token"
           clearable
           :status="token ? '' : 'error'"
           style="width: 200px; margin-right: 16px"
