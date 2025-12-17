@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { nextTick, reactive, ref } from "vue";
 import { darkTheme, lightTheme, zhCN, dateZhCN } from "naive-ui";
 import basic from "./components/basic.vue";
 import job from "./components/job.vue";
@@ -244,41 +244,43 @@ const save = async () => {
   localStorage.setItem("resume_data", JSON.stringify(resumeData));
   if (!validateData()) return message.error(t("const.input"));
   changeLang();
-  if (!validateData()) return;
-  message.info(t("const.loading"));
-  const version = updateVersion(resumeData.sys.version);
-  resumeData.sys.updateTime = getTimeStr(new Date());
-  resumeData.sys.version = version;
-  console.log("保存的数据是---------", JSON.stringify(resumeData, null, 2));
-  const res1 = await api_updateContent(
-    "sys.json",
-    JSON.stringify(resumeData.sys)
-  );
-  const res2 = await api_updateContent(
-    "zh.json",
-    JSON.stringify(resumeData.zh)
-  );
-  const res3 = await api_updateContent(
-    "en.json",
-    JSON.stringify(resumeData.en)
-  );
-  Promise.all([res1, res2, res3])
-    .then((ress) => {
-      if (ress.every((res) => res.code === 200)) {
-        message.success(t("const.successl"));
-        isEdit.value = false;
-        btnRef.value.setIsEdit(false);
-        changeLang();
-        console.log(resumeData, "--------------");
-      } else {
+  nextTick(async () => {
+    if (!validateData()) return message.error(t("const.input"));
+    message.info(t("const.loading"));
+    const version = updateVersion(resumeData.sys.version);
+    resumeData.sys.updateTime = getTimeStr(new Date());
+    resumeData.sys.version = version;
+    console.log("保存的数据是---------", JSON.stringify(resumeData, null, 2));
+    const res1 = await api_updateContent(
+      "sys.json",
+      JSON.stringify(resumeData.sys)
+    );
+    const res2 = await api_updateContent(
+      "zh.json",
+      JSON.stringify(resumeData.zh)
+    );
+    const res3 = await api_updateContent(
+      "en.json",
+      JSON.stringify(resumeData.en)
+    );
+    Promise.all([res1, res2, res3])
+      .then((ress) => {
+        if (ress.every((res) => res.code === 200)) {
+          message.success(t("const.successl"));
+          isEdit.value = false;
+          btnRef.value.setIsEdit(false);
+          changeLang();
+          console.log(resumeData, "--------------");
+        } else {
+          changeLang();
+          message.error(t("const.faill"));
+        }
+      })
+      .catch((err) => {
         changeLang();
         message.error(t("const.faill"));
-      }
-    })
-    .catch((err) => {
-      changeLang();
-      message.error(t("const.faill"));
-    });
+      });
+  });
 };
 const themeChange = (isDark) => {
   theme.value = isDark ? darkTheme : lightTheme;
