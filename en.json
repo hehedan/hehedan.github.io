@@ -6,10 +6,11 @@
     "cnl": "Company Name",
     "jobl": "Job Title",
     "ccl": "Responsibilities",
+    "pcl": "Project Content",
     "pnl": "Project Name",
     "linkl": "Project Link",
     "input": "Please enter",
-    "successl": "Operation success",
+    "successl": "Operation success, please refresh the page to view",
     "faill": "Operation failed",
     "loading": "Requesting...",
     "version": "version"
@@ -31,7 +32,7 @@
   },
   "job": {
     "title": "Work Experience",
-    "list": "[{\"company\":\"Shenzhen Faben Information Technology Co., Ltd. (Nov 2021 - Present)\",\"name\":\"Frontend Developer\",\"content\":\"Mainly participated in outsourcing projects for China UnionPay and SAIC Volkswagen clients. During this period, helped clients quickly build backend management system pages, achieving early launch. After launch, actively stationed on-site, proactively communicated requirements with clients, troubleshooted issues, continuously optimized the project, and finally won client satisfaction.\"},{\"company\":\"Wuxi Yazuo Online Technology Co., Ltd. (Sep 2019 - May 2020)\",\"name\":\"Full-Stack Developer\",\"content\":\"Led an internship team to complete the onboarding project defense designed by the company. The program lasted 3 months, during which we sorted out the main project process, clarified goals and business logic for each team member, and formulated a detailed division of labor plan. The project was launched on schedule, winning praise from the product manager. Later, responsible for developing and maintaining the company's cash register management system, and regularly organizing interfaces and business documents.\"},{\"company\":\"Shanghai Newtouch Software Co., Ltd. (Jul 2018 - Aug 2019)\",\"name\":\"Full-Stack Developer\",\"content\":\"Responsible for the development, testing and optimization of the company's portal website pages, responsible for the development and maintenance of basic backend interfaces of the website, and regularly organizing interfaces, business and scheme documents.\"}]"
+    "list": "[{\"company\":\"Beijing Jiebeisi Information Technology Consulting Co., Ltd. (August 2023 - Present)\",\"name\":\"Frontend Developer\",\"content\":\"Stationed at Kunshan Rural Commercial Bank, I participated in and took charge of projects including Kun Xiaozhi, the dual-end Marketing Campaign Platform, Business Opportunity Management, Data Middle Platform, and Data Service Development Center.\"},{\"company\":\"Shenzhen Faben Information Technology Co., Ltd. (Nov 2021 - July 2023)\",\"name\":\"Frontend Developer\",\"content\":\"Mainly participated in outsourcing projects for China UnionPay and SAIC Volkswagen clients. During this period, helped clients quickly build backend management system pages, achieving early launch. After launch, actively stationed on-site, proactively communicated requirements with clients, troubleshooted issues, continuously optimized the project, and finally won client satisfaction.\"},{\"company\":\"Wuxi Yazuo Online Technology Co., Ltd. (Sep 2019 - May 2020)\",\"name\":\"Full-Stack Developer\",\"content\":\"Led an internship team to complete the onboarding project defense designed by the company. The program lasted 3 months, during which we sorted out the main project process, clarified goals and business logic for each team member, and formulated a detailed division of labor plan. The project was launched on schedule, winning praise from the product manager. Later, responsible for developing and maintaining the company's cash register management system, and regularly organizing interfaces and business documents.\"},{\"company\":\"Shanghai Newtouch Software Co., Ltd. (Jul 2018 - Aug 2019)\",\"name\":\"Full-Stack Developer\",\"content\":\"Responsible for the development, testing and optimization of the company's portal website pages, responsible for the development and maintenance of basic backend interfaces of the website, and regularly organizing interfaces, business and scheme documents.\"}]"
   },
   "project": {
     "title": "Project Experience",
@@ -39,6 +40,6 @@
   },
   "project_me": {
     "title": "Personal Projects",
-    "list": "[{\"name\":\"DuoDian Life\", \"ic\":\"content\", \"cc\":\"content\", \"dc\":\"content\", \"link\":\"23333\"}]"
+    "list": "[{\"name\":\"DuoDian Life\",\"ic\":\"content\",\"cc\":\"content\",\"dc\":\"content\",\"link\":\"23333\"},{\"name\":\"1\",\"ic\":\"\",\"cc\":\"\",\"dc\":\"\"},{\"name\":\"\",\"ic\":\"\",\"cc\":\"\",\"dc\":\"\"}]"
   }
 }

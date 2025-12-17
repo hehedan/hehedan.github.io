@@ -19,15 +19,21 @@
         </div>
         <div>
           <div class="project_me-item">
-            <label>▪ {{ t("const.il") }}：</label>
+            <label :style="locale === 'en' ? 'width: 166px' : ''"
+              >▪ {{ t("const.il") }}：</label
+            >
             <div>{{ i.ic }}</div>
           </div>
           <div class="project_me-item">
-            <label>▪ {{ t("const.cl") }}：</label>
+            <label :style="locale === 'en' ? 'width: 166px' : ''"
+              >▪ {{ t("const.pcl") }}：</label
+            >
             <div>{{ i.cc }}</div>
           </div>
           <div class="project_me-item">
-            <label>▪ {{ t("const.dl") }}：</label>
+            <label :style="locale === 'en' ? 'width: 166px' : ''"
+              >▪ {{ t("const.dl") }}：</label
+            >
             <div>{{ i.dc }}</div>
           </div>
         </div>
@@ -234,6 +240,7 @@ defineExpose({
     flex-direction: row;
     label {
       font-weight: bold;
+      flex-shrink: 0;
     }
   }
 }
