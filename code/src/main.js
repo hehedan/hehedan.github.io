@@ -20,6 +20,7 @@ import {
   NInput,
   NDrawer,
   NDrawerContent,
+  NSpin,
 } from "naive-ui";
 
 const naive = create({
@@ -36,6 +37,7 @@ const naive = create({
     NInput,
     NDrawer,
     NDrawerContent,
+    NSpin
   ],
 });
 app.use(naive);

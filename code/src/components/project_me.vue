@@ -13,28 +13,28 @@
         <div class="project_me-name">
           {{ i.name }}
 
-          <n-icon class="icon-btn" @click="openLink(i.link)"
+          <n-icon class="icon-btn" v-show="isLinkShow" @click="openLink(i.link)"
             ><LinkOutline
           /></n-icon>
         </div>
         <div>
           <div class="project_me-item">
-            <label :style="locale === 'en' ? 'width: 166px' : ''"
+            <label :style="locale === 'en' ? 'width: 166px' : 'width: 88px'"
               >▪ {{ t("const.il") }}：</label
             >
-            <div>{{ i.ic }}</div>
+            <div class="flex-wrap">{{ i.ic }}</div>
           </div>
           <div class="project_me-item">
-            <label :style="locale === 'en' ? 'width: 166px' : ''"
+            <label :style="locale === 'en' ? 'width: 166px' : 'width: 88px'"
               >▪ {{ t("const.pcl") }}：</label
             >
-            <div>{{ i.cc }}</div>
+            <div class="flex-wrap">{{ i.cc }}</div>
           </div>
           <div class="project_me-item">
-            <label :style="locale === 'en' ? 'width: 166px' : ''"
+            <label :style="locale === 'en' ? 'width: 166px' : 'width: 88px'"
               >▪ {{ t("const.dl") }}：</label
             >
-            <div>{{ i.dc }}</div>
+            <div class="flex-wrap">{{ i.dc }}</div>
           </div>
         </div>
       </div>
@@ -142,6 +142,7 @@ const props = defineProps({
 });
 const emits = defineEmits(["change"]);
 const { t, locale } = useI18n();
+const isLinkShow = ref(true);
 const list = ref();
 const project_meInputRef = ref(null);
 const initData = () => {
@@ -216,11 +217,15 @@ const validateData = () => {
   const res = project_meInputRef.value.some((i) => i.status === "error");
   return !res;
 };
+const setLinkVisiable = (v) => {
+  isLinkShow.value = !v;
+};
 // 监听语言变化
 watch(locale, () => initData());
 onMounted(() => initData());
 defineExpose({
   validateData,
+  setLinkVisiable,
 });
 </script>
 <style lang="less" scoped>

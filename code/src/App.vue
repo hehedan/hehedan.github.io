@@ -8,6 +8,7 @@
         @select-change="selectChange"
         @save="save"
         @edit="edit"
+        @download="download"
         :isEdit="isEdit"
       />
       <div class="main-container" id="main-container" ref="maincRef">
@@ -286,7 +287,9 @@ const themeChange = (isDark) => {
   theme.value = isDark ? darkTheme : lightTheme;
   document.documentElement.dataset.theme = isDark ? "dark" : "light";
 };
-
+const download = (v) => {
+  projectMeRef.value.setLinkVisiable(v);
+};
 const langChange = (val) => {
   maincRef.value.scrollTo(0, 0);
   isZh.value = val;

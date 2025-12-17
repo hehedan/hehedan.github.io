@@ -31,12 +31,16 @@ export function updateVersion(currentVersion) {
 }
 
 // js写一个获取当前时间格式 yyyy-MM-dd HH:mm:ss
-export function getTimeStr(idate) {
+export function getTimeStr(idate, forFile = false) {
   const year = idate.getFullYear();
   const month = String(idate.getMonth() + 1).padStart(2, "0");
   const date = String(idate.getDate()).padStart(2, "0");
   const hours = String(idate.getHours()).padStart(2, "0");
   const minutes = String(idate.getMinutes()).padStart(2, "0");
   const seconds = String(idate.getSeconds()).padStart(2, "0");
-  return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+  if (forFile) {
+    return `${year}-${month}-${date} ${hours}-${minutes}-${seconds}`;
+  } else {
+    return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+  }
 }

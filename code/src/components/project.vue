@@ -13,22 +13,22 @@
         <div class="project-name">{{ i.name }}</div>
         <div>
           <div class="project-item">
-            <label :style="locale === 'en' ? 'width: 166px' : ''"
+            <label :style="locale === 'en' ? 'width: 166px' : 'width: 88px'"
               >▪ {{ t("const.il") }}：</label
             >
-            <div>{{ i.ic }}</div>
+            <div class="flex-wrap">{{ i.ic }}</div>
           </div>
           <div class="project-item">
-            <label :style="locale === 'en' ? 'width: 166px' : ''"
+            <label :style="locale === 'en' ? 'width: 166px' : 'width: 88px'"
               >▪ {{ t("const.cl") }}：</label
             >
-            <div>{{ i.cc }}</div>
+            <div class="flex-wrap">{{ i.cc }}</div>
           </div>
           <div class="project-item">
-            <label :style="locale === 'en' ? 'width: 166px' : ''"
+            <label :style="locale === 'en' ? 'width: 166px' : 'width: 88px'"
               >▪ {{ t("const.dl") }}：</label
             >
-            <div>{{ i.dc }}</div>
+            <div class="flex-wrap">{{ i.dc }}</div>
           </div>
         </div>
       </div>

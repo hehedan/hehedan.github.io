@@ -11,6 +11,8 @@
   "dependencies": {
     "@octokit/rest": "^22.0.1",
     "@vicons/ionicons5": "^0.13.0",
+    "@zumer/snapdom": "^2.0.1",
+    "jspdf": "^3.0.4",
     "less": "^4.4.2",
     "less-loader": "^12.3.0",
     "naive-ui": "^2.43.2",

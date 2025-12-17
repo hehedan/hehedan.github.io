@@ -37,9 +37,10 @@
           <n-icon><Save /></n-icon>
         </template>
       </n-button>
-      <n-button round @click="downloadPdf">
+      <n-button round :disabled="loadDisabled" @click="downloadPdf">
         <template #icon>
-          <n-icon>
+          <n-spin v-if="loadDisabled" size="16" />
+          <n-icon v-else>
             <CloudDownloadOutline />
           </n-icon>
         </template>
@@ -77,7 +78,7 @@
 </template>
 <script setup>
 import { selectOpts } from "../utils/const";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import {
   Sunny,
   CloudDownloadOutline,
@@ -90,6 +91,8 @@ import {
 } from "@vicons/ionicons5";
 import { initOctokit } from "../utils/githubApi";
 import { useI18n } from "vue-i18n";
+import { exportMessagesToPdf } from "../utils/toPDF";
+import { getTimeStr } from "../utils/index";
 const { t, locale } = useI18n();
 const props = defineProps({
   isEdit: {
@@ -100,7 +103,7 @@ const props = defineProps({
 const active = ref(false);
 const isEditFlag = ref(false);
 const token = ref("");
-
+const loadDisabled = ref(false);
 onMounted(() => {
   isEditFlag.value = props.isEdit;
   if (props.isEdit) {
@@ -113,18 +116,25 @@ const emits = defineEmits([
   "selectChange",
   "save",
   "edit",
+  "download",
 ]);
-const downloadPdf = () => {
-  // 创建一个 a 标签
-  var a = document.createElement("a");
-  // 设置 a 标签的 href 属性为 URL 对象
-  a.href = `${import.meta.env.BASE_URL}${locale.value}.pdf`;
-  // 设置 a 标签的 download 属性为文件名
-  a.download = (locale.value === "zh" ? "我的简历" : "My Resume") + ".pdf";
-  // 模拟点击 a 标签
-  a.click();
-  a.remove();
-  a = null;
+const downloadPdf = async () => {
+  loadDisabled.value = true;
+  emits("download", true);
+  nextTick(async () => {
+    const timestamp = getTimeStr(new Date(), true);
+    const filename = `${t("basic.name") || ""}(${
+      locale.value
+    })${timestamp}.pdf`;
+
+    await exportMessagesToPdf({
+      targetSelector: ".main-container",
+      filename,
+      quality: 0.95,
+    });
+    loadDisabled.value = false;
+    emits("download", false);
+  });
 };
 const select = ref("basic");
 const edit = () => {
