@@ -17,44 +17,51 @@ import { jsPDF } from "jspdf";
  * 将 DOM 元素转换为图片
  */
 export async function captureElementToImage(element, quality = IMAGE_QUALITY) {
-  console.log("开始截图...");
+  return new Promise(async (resolve) => {
+    console.log("开始截图...");
 
-  // 保存原始样式
-  const originalOverflow = element.style.overflow;
-  const originalHeight = element.style.height;
-  const originalMaxHeight = element.style.maxHeight;
+    // 保存原始样式
+    const originalOverflow = element.style.overflow;
+    const originalHeight = element.style.height;
+    const originalMaxHeight = element.style.maxHeight;
 
-  // 临时设置样式，确保完整截图
-  element.style.overflow = "visible";
-  element.style.height = "auto";
-  element.style.maxHeight = "none";
+    // 临时设置样式，确保完整截图
+    element.style.overflow = "visible";
+    element.style.height = "auto";
+    element.style.maxHeight = "none";
 
-  try {
-    // 核心：使用 snapdom 进行截图
-    const capture = await snapdom(element, {
-      scale: 2, // 2倍清晰度
-      quality: quality,
-    });
+    try {
+      // 核心：使用 snapdom 进行截图
+      const capture = await snapdom(element, {
+        scale: 2, // 2倍清晰度
+        quality: quality,
+      });
 
-    // 优先使用 toPng()
-    const imgElement = await capture.toPng();
-    const dataUrl = imgElement.src;
-
-    // 验证数据有效性
-    if (!dataUrl || dataUrl.length < 100) {
-      console.log("toPng 返回无效，尝试 toCanvas...");
+      // // 优先使用 toPng()
+      // const imgElement = await capture.toPng();
+      // const dataUrl = imgElement.src;
+      // let dataUrl = "";
+      // 验证数据有效性
+      // if (!dataUrl || dataUrl.length < 100) {
+      // console.log("toPng 返回无效，尝试 toCanvas...");
       const canvas = await capture.toCanvas();
-      return canvas.toDataURL(IMAGE_FORMAT, quality);
-    }
+      canvas.toBlob((blob) => {
+        const pageDataUrl = URL.createObjectURL(blob);
+        console.log("toCanvas 成功，dataUrl:", pageDataUrl);
+        resolve({ url: pageDataUrl, size: blob.size });
+      });
+      // return canvas.toDataURL(IMAGE_FORMAT, quality);
+      // }
 
-    console.log("截图成功，大小:", (dataUrl.length / 1024).toFixed(2), "KB");
-    return dataUrl;
-  } finally {
-    // 恢复原始样式
-    element.style.overflow = originalOverflow;
-    element.style.height = originalHeight;
-    element.style.maxHeight = originalMaxHeight;
-  }
+      // console.log("截图成功，大小:", (dataUrl.length / 1024).toFixed(2), "KB");
+      // return dataUrl;
+    } finally {
+      // 恢复原始样式
+      element.style.overflow = originalOverflow;
+      element.style.height = originalHeight;
+      element.style.maxHeight = originalMaxHeight;
+    }
+  });
 }
 
 /**
@@ -210,11 +217,11 @@ export async function exportMessagesToPdf(config) {
   });
 
   // 2. DOM 截图
-  const imageDataUrl = await captureElementToImage(element, quality);
-  console.log("截图完成，大小:", (imageDataUrl.length / 1024).toFixed(2), "KB");
+  const { url, size } = await captureElementToImage(element, quality);
+  console.log("截图完成，大小:", (size / 1024).toFixed(2), "KB");
 
   // 3. 图片分页
-  const pages = await splitImageIntoPages(imageDataUrl);
+  const pages = await splitImageIntoPages(url);
   console.log(`分页完成，共 ${pages.length} 页`);
 
   // 4. 创建 PDF
