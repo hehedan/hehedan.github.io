@@ -130,7 +130,7 @@ export async function splitImageIntoPages(imageDataUrl) {
 
           // 测试看下分割高度
           const height = await getNoBlankHeight(
-            20,
+            40,
             [255, 255, 255],
             img,
             lineY,
