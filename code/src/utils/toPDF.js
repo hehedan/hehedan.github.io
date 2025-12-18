@@ -12,6 +12,7 @@ const IMAGE_QUALITY = 0.95;
 const IMAGE_FORMAT = "image/png";
 import { snapdom } from "@zumer/snapdom";
 import { jsPDF } from "jspdf";
+import { getNoBlankHeight, listSum } from "./index";
 
 /**
  * 将 DOM 元素转换为图片
@@ -64,15 +65,12 @@ export async function captureElementToImage(element, quality = IMAGE_QUALITY) {
   });
 }
 
-/**
- * 将长图片分割成多个 A4 页面
- */
 export async function splitImageIntoPages(imageDataUrl) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = "anonymous";
 
-    img.onload = () => {
+    img.onload = async () => {
       const pages = [];
       const originalWidth = img.width;
       const originalHeight = img.height;
@@ -88,45 +86,27 @@ export async function splitImageIntoPages(imageDataUrl) {
       // 计算缩放比例（图片宽度适配页面宽度）
       const widthScale = pageContentWidthPx / originalWidth;
       const scaledHeight = originalHeight * widthScale;
-
-      // 计算总页数
-      const totalPages = Math.ceil(scaledHeight / pageContentHeightPx);
-
       console.log(`原始尺寸: ${originalWidth}x${originalHeight}px`);
-      console.log(`缩放后高度: ${scaledHeight}px, 总页数: ${totalPages}`);
-
-      // 逐页裁剪
-      for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
-        const startY = pageIndex * pageContentHeightPx;
-        const endY = Math.min(startY + pageContentHeightPx, scaledHeight);
-        const currentPageHeight = Math.floor(endY - startY);
-
-        // 计算源图片对应的区域
-        const sourceStartY = startY / widthScale;
-        const sourceHeight = currentPageHeight / widthScale;
-
-        // 创建新 Canvas
+      console.log(`缩放后高度: ${scaledHeight}px`);
+      if (scaledHeight <= pageContentHeightPx) {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-
         canvas.width = pageContentWidthPx;
-        canvas.height = currentPageHeight;
-
+        canvas.height = scaledHeight;
         // 高质量渲染
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = "high";
-
         // 绘制当前页内容
         ctx.drawImage(
           img,
           0,
-          sourceStartY, // 源图片起始位置
+          0, // 源图片起始位置
           originalWidth,
-          sourceHeight, // 源图片尺寸
+          originalHeight, // 源图片尺寸
           0,
           0, // 目标起始位置
           pageContentWidthPx,
-          currentPageHeight // 目标尺寸
+          scaledHeight // 目标尺寸
         );
 
         // 转换为 data URL
@@ -135,10 +115,73 @@ export async function splitImageIntoPages(imageDataUrl) {
         pages.push({
           dataUrl: pageDataUrl,
           width: pageContentWidthPx,
-          height: currentPageHeight,
+          height: scaledHeight,
         });
+      } else {
+        let img_needHandleHeight = originalHeight;
+        let pageNum = 1;
+        let heights = [];
+        while (img_needHandleHeight > 0) {
+          // 单次处理的图片高度
+          const onceHandleImgHeight = pageContentHeightPx / widthScale;
 
-        console.log(`第 ${pageIndex + 1}/${totalPages} 页处理完成`);
+          let lineY =
+            onceHandleImgHeight * pageNum - listSum(heights, pageNum - 2);
+
+          // 测试看下分割高度
+          const height = await getNoBlankHeight(
+            20,
+            [255, 255, 255],
+            img,
+            lineY,
+            originalWidth,
+            2
+          );
+          console.log(height, "---height");
+          heights.push(height);
+
+          // 创建新 Canvas
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high";
+          canvas.width = pageContentWidthPx;
+
+          let currentPageHeight = onceHandleImgHeight - height;
+          let height_canvas = currentPageHeight * widthScale;
+          canvas.height = height_canvas;
+
+          // 绘制当前页内容
+          ctx.drawImage(
+            img,
+            0,
+            ((pageNum - 1) * pageContentHeightPx) / widthScale -
+              listSum(heights, pageNum - 2), // 源图片起始位置
+            originalWidth,
+            currentPageHeight, // 源图片尺寸
+            0,
+            0, // 目标起始位置
+            pageContentWidthPx,
+            height_canvas // 目标尺寸
+          );
+
+          console.log(`第 ${pageNum} 页处理完成`);
+          // 转换为 data URL
+          const pageDataUrl = canvas.toDataURL(IMAGE_FORMAT, IMAGE_QUALITY);
+
+          pages.push({
+            dataUrl: pageDataUrl,
+            width: pageContentWidthPx,
+            height: height_canvas,
+          });
+          pageNum++;
+          img_needHandleHeight -= currentPageHeight;
+          console.log(img_needHandleHeight, "---剩下的多少");
+          // 解决最后一页没有内容
+          if (img_needHandleHeight < 1) {
+            img_needHandleHeight = 0;
+          }
+        }
       }
 
       resolve(pages);
